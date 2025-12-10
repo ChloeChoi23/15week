@@ -294,19 +294,22 @@
             display:block;
         }
         #fullFadeBlack, #fullFadeAfter {
-    position:fixed;
-    inset:0;
-    z-index:999999999;
-    pointer-events:none;
-    opacity:0;
-    transition:opacity 2s ease;
+            position:fixed;
+            inset:0;
+            z-index:999999999;
+            pointer-events:none;
+            opacity:0;
 }
-#fullFadeBlack {
-    background:#000;
+       #fullFadeBlack {
+        background:#000;
+        transition:opacity 1.6s ease; 
 }
-#fullFadeAfter {
-    background:url('after.jpg') center/cover no-repeat;
+
+       #fullFadeAfter {
+        background:url('after.jpg') center/cover no-repeat;
+        transition:opacity 2.4s ease;   
 }
+
 
         #endingCards {
             display:flex;
@@ -323,6 +326,7 @@
         #endingCards::-webkit-scrollbar {
             display:none;
         }
+
         #endingCards .card {
             width:460px;
             background:#0b0f0e;
@@ -330,13 +334,14 @@
             padding:22px;
             color:white;
             flex-shrink:0;
-            box-shadow:0 4px 14px rgba(0,0,0,0.45);
+            border:1px solid rgba(160,255,210,0.85); 
+            box-shadow:0 0 24px rgba(0,255,210,0.35);
             transition:0.35s ease;
-            border:1px solid rgba(93,249,122,0.08);
-        }
+}
+
         #endingCards .card .imgWrap {
             width:100%;
-            height:240px;
+            height:240px; 
             border-radius:14px;
             background:#000;
             display:flex;
@@ -363,26 +368,26 @@
         }
         #endingCards .card:hover {
             transform:translateY(-10px);
-            border:1px solid #5df97a;
-            box-shadow: 0 0 12px rgba(93,249,122,0.85), 0 0 28px rgba(93,249,122,0.45);
-        }
+            border:1px solid rgba(160,255,210,1);
+            box-shadow:0 0 24px rgba(0,255,210,0.85), 0 0 40px rgba(0,255,210,0.45);
+}
+
         .shape-overlay.show{
             display:block;
             pointer-events:none !important;
         }
-#endingScreen{
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
+        #endingScreen{
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
 }
-
-#endingTitle,
-#endingMessage,
-#endingSub{
-    text-align: center;
-    margin-left: 0;
-    margin-right: 0;
+         #endingTitle,
+         #endingMessage,
+         #endingSub{
+            text-align: center;
+            margin-left: 0;
+            margin-right: 0;
 }
 
 
@@ -559,7 +564,7 @@ function draw(){
 draw();
 
 const species=[
-    "수달","황새","가시연꽃","큰고니","삵","노랑부리저어새",
+    "수달","독수리","가시연꽃","큰고니","삵","노랑부리저어새",
     "큰기러기","조롱이","참수리","귀이빨대칭이","수리부엉이","뜸부기"
 ];
 let recentNames=[];
@@ -595,11 +600,11 @@ function createFloatingName(x,y){
 function scheduleCreatureFade(){
     creatures.forEach((el, index) => {
         setInterval(() => {
+
             if (el.classList.contains("alreadyClicked")) {
                 el.classList.add("gone");
                 return;
             }
-
             el.classList.toggle("hide");
 
         }, 3000 + index * 400);
@@ -842,6 +847,7 @@ creatures.forEach(c => {
         const data = info[c.id];
         const overlay = overlays[c.id];
 
+        // infoBox 생성
         const newBox = infoBox.cloneNode(true);
         document.body.appendChild(newBox);
 
@@ -886,120 +892,142 @@ creatures.forEach(c => {
         });
     });
 });
-function checkAllAwakened() {
+    function checkAllAwakened() {
     if (awakenedCount === totalCreatures && overlayShownCount === totalCreatures) {
 
         const fadeBlack = document.getElementById("fullFadeBlack");
         const fadeAfter = document.getElementById("fullFadeAfter");
         const bg = document.getElementById("bg");
 
-        fadeBlack.style.transition = "opacity 0.8s ease";
+        fadeBlack.style.transition = "opacity 0.25s ease-out";
         fadeBlack.style.opacity = 1;
 
         setTimeout(() => {
 
-            fadeAfter.style.opacity = 0;
+            bg.style.background =
+            "linear-gradient(rgba(5,8,6,0.3),rgba(0,0,0,0.6)), url('after.jpg') center/cover no-repeat";
 
-            fadeAfter.style.transition = "opacity 2.5s ease";
+            document.querySelectorAll('.creature, .shape-overlay').forEach(el => {
+                el.style.transition = "opacity 0.25s ease-out";
+                el.style.opacity = 0;
+});
+
+            fadeAfter.style.transition = "opacity 3s ease-out";
             fadeAfter.style.opacity = 1;
 
-            setTimeout(() => {
-                bg.style.background = 
-                    "linear-gradient(rgba(5,8,6,0.3),rgba(0,0,0,0.6)), url('after.jpg') center/cover no-repeat";
-            }, 2000);
-
-            fadeBlack.style.transition = "opacity 0.6s ease";
+            fadeBlack.style.transition = "opacity 1.2s ease-out";
             fadeBlack.style.opacity = 0;
 
             setTimeout(() => {
                 fadeAfter.style.opacity = 0;
-            }, 3500);
+            }, 3000);
 
-        }, 2000); 
+        }, 400);
 
-        setTimeout(showEnding, 4500);
+        setTimeout(showEnding, 3800);
     }
 }
 
 
 
 
+
 function showEnding(){
-    const end = document.getElementById("endingScreen");
-    const msg = document.getElementById("endingMessage");
+    const textBox = document.getElementById("endingTextContainer");
+    const line1   = document.getElementById("endingLine1");
+    const line2   = document.getElementById("endingLine2");
+
+    const end   = document.getElementById("endingScreen");
+    const msg   = document.getElementById("endingMessage");
     const title = document.getElementById("endingTitle");
     const cards = document.getElementById("endingCards");
 
-    setTimeout(()=>{
-        document.getElementById("endingSub").style.opacity = 1;
-    }, 5200);
+    textBox.style.opacity = 1;
 
-    end.style.display = "flex";
-
-    setTimeout(()=> {
-        msg.style.opacity = 1;
+    setTimeout(() => {
+        line1.style.opacity = 1;
     }, 300);
 
-    setTimeout(()=> {
-        msg.style.opacity = 0;
-    }, 2800);
+    setTimeout(() => {
+        line2.style.opacity = 1; 
+    }, 1700);
 
-    setTimeout(()=> {
-        title.style.opacity = 1;
-    }, 3600);
+    setTimeout(() => {
+        line1.style.opacity = 0;
+        line2.style.opacity = 0;
+        textBox.style.opacity = 0;
+    }, 4800); 
 
-    setTimeout(()=>{
-        cards.style.opacity = 1;
-        cards.style.transform = "translateY(0)";
-    }, 4200);
-const cardContainer = document.getElementById("endingCards");
-const nextStep = document.getElementById("nextStepScreen");
+    setTimeout(() => {
+        end.style.display = "flex";
 
-cardContainer.addEventListener("scroll", () => {
-    const maxScroll = cardContainer.scrollWidth - cardContainer.clientWidth;
-    
-    if (cardContainer.scrollLeft >= maxScroll - 10) {
+        setTimeout(()=> {
+            msg.style.opacity = 1;
+        }, 300);
 
-        nextStep.style.display = "block";
-        nextStep.style.opacity = 0;
+        setTimeout(()=> {
+            msg.style.opacity = 0;
+        }, 2800);
 
-        setTimeout(() => {
-            nextStep.style.transition = "opacity 1.5s ease";
-            nextStep.style.opacity = 1;
-
-        nextStep.innerHTML = `
-    <div style="
-        position:absolute;
-        top:50%;
-        left:50%;
-        transform:translate(-50%, -50%);
-        text-align:center;
-        width:100%;
-    ">
-        <h1 style="
-            font-family:'Shilla';
-            font-size:2.6rem;
-            margin-bottom:20px;
-        ">
-            당신이 기억했기에, 이곳은 오늘도 숨을 쉽니다.
-        </h1>
-
-        <p style="
-            font-size:1.3rem;
-            color:#cccccc;
-            line-height:1.8;
-            margin-top:20px;
-        ">
-            작은 관심이 또 하나의 생명을 지켜냅니다.<br>
-        </p>
-    </div>
-`;
+        setTimeout(()=> {
+            title.style.opacity = 1;
+        }, 3600);
+        setTimeout(()=> {
+            document.getElementById("endingSub");
+            endingSub.style.opacity = 1;
+        }, 8200);
 
 
-        }, 200);
-    }
-});
+        setTimeout(()=>{
+            cards.style.opacity = 1;
+            cards.style.transform = "translateY(0)";
+        }, 4800);
+        const cardContainer = document.getElementById("endingCards");
+        const nextStep = document.getElementById("nextStepScreen");
 
+        cardContainer.addEventListener("scroll", () => {
+            const maxScroll = cardContainer.scrollWidth - cardContainer.clientWidth;
+            
+            if (cardContainer.scrollLeft >= maxScroll - 10) {
+                nextStep.style.display = "block";
+                nextStep.style.opacity = 0;
+
+                setTimeout(() => {
+                    nextStep.style.transition = "opacity 1.5s ease";
+                    nextStep.style.opacity = 1;
+
+                    nextStep.innerHTML = `
+                        <div style="
+                            position:absolute;
+                            top:50%;
+                            left:50%;
+                            transform:translate(-50%, -50%);
+                            text-align:center;
+                            width:100%;
+                        ">
+                            <h1 style="
+                                font-family:'Shilla';
+                                font-size:2.6rem;
+                                margin-bottom:20px;
+                            ">
+                                당신이 기억했기에, 이곳은 오늘도 숨을 쉽니다.
+                            </h1>
+
+                            <p style="
+                                font-size:1.3rem;
+                                color:#cccccc;
+                                line-height:1.8;
+                                margin-top:20px;
+                            ">
+                                작은 관심이 또 하나의 생명을 지켜냅니다.<br>
+                            </p>
+                        </div>
+                    `;
+                }, 200);
+            }
+        });
+
+    }, 5200);
 }
 
 startStatsIntro();
@@ -1030,34 +1058,77 @@ startStatsIntro();
         transition:opacity 1s ease;">
         생물을 클릭해보세요. 각 생물의 정보를 확인할 수 있습니다.
     </div>
- <div id="endingScreen" style="display:none; position:fixed; inset:0; background:#000; z-index:9999999; justify-content:center; align-items:center; flex-direction:column;">
-        <h2 id="endingTitle" style="
-            font-family:'Shilla';
-            font-size:2rem;
-            color:white;
-            margin-bottom:30px;
+    <div id="endingTextContainer" style="
+        position:fixed;
+        inset:0;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        width:100%;
+        color:white;
+        z-index:9999999;
+        opacity:0;
+        pointer-events:none;
+        font-family:'Shilla';
+        transition:opacity 1.8s ease;
+    ">
+        <div id="endingLine1" style="
+        font-size:1.8rem;
+        line-height:1.6;
+        margin-bottom:24px;
+        opacity:0;
+        transition:opacity 1.8s ease;
+        white-space:pre-line;
+">
+    화포천 습지는 전체 면적의 70% 이상이 자연습지로 남아 있는 국내 희귀 생태지역으로,
+    멸종위기종 20여 종과 600종 이상의 생물이 서식하는 생물다양성의 핵심 지대입니다.
+</div>
+
+
+        <div id="endingLine2" style="
+            font-size:2.4rem;
             opacity:0;
-            transition:opacity 1s ease;
-        "> 화포천 습지에 사는 멸종위기 생물들 </h2>
-        
-        <div id="endingMessage" style="font-family:'Shilla'; font-size:3rem; color:white; opacity:0; transition:opacity 1.5s ease; margin-bottom:40px;">
+            transition:opacity 2s ease;
+        ">
             사라져가는 생물들을 기억해주세요.
         </div>
+    </div>
+    <div id="endingScreen" style="
+    display:none; position:fixed; inset:0; background:#000; 
+    z-index:9999999; justify-content:center; align-items:center; 
+    flex-direction:column;">
 
-        <div id="endingSub" style="
-            font-family:'Noto Sans KR';
-            color:#ccc;
-            opacity:0;
-            font-size:1.2rem;
-            margin-top:10px;
-            max-width:800px;
-            text-align:center;
-            line-height:1.6;
-            transition:opacity 1.5s ease;
-        ">
-            우리가 더 이상 보지 못할지도 모를 생물들입니다.<br>
-            이들을 기억하고, 관심을 가져주세요.
-        </div>
+    <h2 id="endingTitle" style="
+        font-family:'Shilla';
+        font-size:2rem;
+        color:white;
+        margin-bottom:30px;
+        opacity:0;
+        transition:opacity 1s ease;">
+        화포천 습지에 사는 멸종위기 생물들
+    </h2>
+
+    <div id="endingMessage" style="
+        font-family:'Shilla'; font-size:3rem; color:white;
+        opacity:0; transition:opacity 1.5s ease; margin-bottom:40px;">
+        사라져가는 생물들을 기억해주세요.
+    </div>
+
+    <div id="endingSub" style="
+        font-family:'Noto Sans KR';
+        color:#ccc;
+        opacity:0;
+        font-size:1.2rem;
+        margin-top:-6px;
+        max-width:800px;
+        text-align:center;
+        line-height:1.6;
+        transition:opacity 1.5s ease;">
+        우리가 더 이상 보지 못할지도 모를 생물들입니다.<br>
+        이들을 기억하고, 관심을 가져주세요.
+    </div>
         
         <div id="endingCards">
             <div class="card">
@@ -1139,18 +1210,19 @@ startStatsIntro();
     background:#000;
     opacity:0;
     pointer-events:none;
-    z-index:999999999;
-"></div>
+    z-index:999999999;"></div>
+
 <div id="flashReveal" style="
     position:fixed;
     inset:0;
     background:url('after.jpg') center/cover no-repeat;
     opacity:0;
     pointer-events:none;
-    z-index:999999998;
-"></div>
+    z-index:999999998;"></div>
+
 <div id="fullFadeBlack"></div>
 <div id="fullFadeAfter"></div>
+
 </div>
     </div> </body>
 </html>
