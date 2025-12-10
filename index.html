@@ -299,20 +299,15 @@
     z-index:999999999;
     pointer-events:none;
     opacity:0;
-    transition:opacity 2s ease; /* 기본 페이드시간 */
+    transition:opacity 2s ease;
 }
-
-/* 1) 처음 전체 암전용 */
 #fullFadeBlack {
     background:#000;
 }
-
-/* 2) after.jpg 페이드용 */
 #fullFadeAfter {
     background:url('after.jpg') center/cover no-repeat;
 }
 
-        /* ============================ 엔딩 카드 레이아웃 수정본 ============================ */
         #endingCards {
             display:flex;
             gap:32px;
@@ -328,9 +323,8 @@
         #endingCards::-webkit-scrollbar {
             display:none;
         }
-        /* 카드 */
         #endingCards .card {
-            width:460px; /* ▶ 가로폭 줄임 */
+            width:460px;
             background:#0b0f0e;
             border-radius:20px;
             padding:22px;
@@ -338,12 +332,11 @@
             flex-shrink:0;
             box-shadow:0 4px 14px rgba(0,0,0,0.45);
             transition:0.35s ease;
-            border:1px solid rgba(93,249,122,0.08); /* 얇은 민트 라인 */
+            border:1px solid rgba(93,249,122,0.08);
         }
-        /* 이미지 영역 고정 */
         #endingCards .card .imgWrap {
             width:100%;
-            height:240px; /* ▶ 이미지 고정 높이 */
+            height:240px;
             border-radius:14px;
             background:#000;
             display:flex;
@@ -352,20 +345,17 @@
             overflow:hidden;
             margin-bottom:14px;
         }
-        /* 이미지 비율 유지 + 잘림 없음 */
         #endingCards .card img {
             width:100%;
             height:100%;
-            object-fit:contain; /* ▲ 잘림 없이 fit */
+            object-fit:contain;
             filter:drop-shadow(0 0 4px rgba(93,249,122,0.45));
         }
-        /* 제목 */
         #endingCards .card h3{
             font-family:'Shilla';
             font-size:1.4rem;
             margin-bottom:4px;
         }
-        /* 설명 */
         #endingCards .card p{
             font-size:0.9rem;
             opacity:0.85;
@@ -380,7 +370,6 @@
             display:block;
             pointer-events:none !important;
         }
-        /* 엔딩 화면 전체를 세로 컬럼 + 가운데 정렬 */
 #endingScreen{
     justify-content: center;
     align-items: center;
@@ -388,7 +377,6 @@
     text-align: center;
 }
 
-/* 타이틀 / 큰 멘트 / 작은 멘트 모두 가운데 정렬 */
 #endingTitle,
 #endingMessage,
 #endingSub{
@@ -607,14 +595,11 @@ function createFloatingName(x,y){
 function scheduleCreatureFade(){
     creatures.forEach((el, index) => {
         setInterval(() => {
-
-            // 클릭된 생물은 완전히 제거
             if (el.classList.contains("alreadyClicked")) {
-                el.classList.add("gone"); // display:none 강제
+                el.classList.add("gone");
                 return;
             }
 
-            // 클릭되지 않은 생물만 깜빡임
             el.classList.toggle("hide");
 
         }, 3000 + index * 400);
@@ -679,7 +664,6 @@ function triggerFlashAndIntro(){
 }
 
 function startMainIntro(){
-    // 자동 물결 시작
     autoRippleInterval = setInterval(autoRipples, 700);
 
     const intro    = document.getElementById('intro');
@@ -858,7 +842,6 @@ creatures.forEach(c => {
         const data = info[c.id];
         const overlay = overlays[c.id];
 
-        // infoBox 생성
         const newBox = infoBox.cloneNode(true);
         document.body.appendChild(newBox);
 
@@ -910,38 +893,30 @@ function checkAllAwakened() {
         const fadeAfter = document.getElementById("fullFadeAfter");
         const bg = document.getElementById("bg");
 
-        /* 1) 암전 시작 (0 → 1) */
         fadeBlack.style.transition = "opacity 0.8s ease";
         fadeBlack.style.opacity = 1;
 
-        /* 2) 암전 유지 2초 */
         setTimeout(() => {
 
-            /* 3) after.jpg 페이드인 준비 (처음에는 보이지 않음 → 0) */
             fadeAfter.style.opacity = 0;
 
-            /* 4) 배경 교체 */
             fadeAfter.style.transition = "opacity 2.5s ease";
-            fadeAfter.style.opacity = 1;  // 천천히 밝아짐
+            fadeAfter.style.opacity = 1;
 
-            /* 5) 실제 BG도 after로 바꿈 (페이드가 끝난 후 보이도록) */
             setTimeout(() => {
                 bg.style.background = 
                     "linear-gradient(rgba(5,8,6,0.3),rgba(0,0,0,0.6)), url('after.jpg') center/cover no-repeat";
             }, 2000);
 
-            /* 6) 암전 레이어 제거 */
             fadeBlack.style.transition = "opacity 0.6s ease";
             fadeBlack.style.opacity = 0;
 
-            /* 7) after 페이드 레이어도 제거 */
             setTimeout(() => {
                 fadeAfter.style.opacity = 0;
             }, 3500);
 
-        }, 2000); // ← 암전 유지 시간 조절 가능
+        }, 2000); 
 
-        /* 엔딩 호출 */
         setTimeout(showEnding, 4500);
     }
 }
@@ -961,27 +936,22 @@ function showEnding(){
 
     end.style.display = "flex";
 
-    // 1) 먼저 메시지 등장
     setTimeout(()=> {
         msg.style.opacity = 1;
     }, 300);
 
-    // 2) 메시지 사라짐
     setTimeout(()=> {
         msg.style.opacity = 0;
     }, 2800);
 
-    // 3) 타이틀 나타남
     setTimeout(()=> {
         title.style.opacity = 1;
     }, 3600);
 
-    // 4) 카드 등장
     setTimeout(()=>{
         cards.style.opacity = 1;
         cards.style.transform = "translateY(0)";
     }, 4200);
-    // 🔽 엔딩 카드 스크롤 감지
 const cardContainer = document.getElementById("endingCards");
 const nextStep = document.getElementById("nextStepScreen");
 
@@ -989,7 +959,7 @@ cardContainer.addEventListener("scroll", () => {
     const maxScroll = cardContainer.scrollWidth - cardContainer.clientWidth;
     
     if (cardContainer.scrollLeft >= maxScroll - 10) {
-        // 화면 어둡게 전환
+
         nextStep.style.display = "block";
         nextStep.style.opacity = 0;
 
